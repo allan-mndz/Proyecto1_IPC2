@@ -1,4 +1,4 @@
-package modelos;
+package com.example.proyecto1.modelos;
 
 public class Proveedor {
     private String nombre;
