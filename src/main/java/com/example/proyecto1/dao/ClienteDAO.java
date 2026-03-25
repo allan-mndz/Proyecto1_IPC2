@@ -31,4 +31,36 @@ public class ClienteDAO {
             return false;
         }
     }
+
+    public java.util.List<com.example.proyecto1.modelos.Cliente> obtenerTodosLosClientes() {
+        java.util.List<com.example.proyecto1.modelos.Cliente> listaClientes = new java.util.ArrayList<>();
+
+        String sql = "SELECT * FROM Clientes";
+
+        try (java.sql.Connection con = com.example.proyecto1.config.Conexion.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                com.example.proyecto1.modelos.Cliente c = new com.example.proyecto1.modelos.Cliente();
+
+                c.setDpi(rs.getString("dpi"));
+                c.setNombre(rs.getString("nombre"));
+                java.sql.Date fechaSQL = rs.getDate("fecha_nacimiento");
+                if (fechaSQL != null) {
+                    c.setFechaNacimiento(fechaSQL.toLocalDate());
+                }
+                c.setTelefono(rs.getString("telefono"));
+                c.setEmail(rs.getString("email"));
+                c.setNacionalidad(rs.getString("nacionalidad"));
+
+                listaClientes.add(c);
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Error al obtener la lista de clientes: " + e.getMessage());
+        }
+
+        return listaClientes;
+    }
 }

@@ -29,4 +29,33 @@ public class DestinoDAO {
             return false;
         }
     }
+
+    public java.util.List<com.example.proyecto1.modelos.Destino> obtenerTodosLosDestinos() {
+        java.util.List<com.example.proyecto1.modelos.Destino> listaDestinos = new java.util.ArrayList<>();
+
+        String sql = "SELECT * FROM Destinos";
+
+        try (java.sql.Connection con = com.example.proyecto1.config.Conexion.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                com.example.proyecto1.modelos.Destino d = new com.example.proyecto1.modelos.Destino();
+
+                // Llenamos el objeto con los datos de la fila actual
+                d.setNombre(rs.getString("nombre"));
+                d.setPais(rs.getString("pais"));
+                d.setDescripcion(rs.getString("descripcion"));
+                d.setClima(rs.getString("clima"));
+                d.setImagenUrl(rs.getString("imagen_url"));
+
+                listaDestinos.add(d);
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Error al obtener el catálogo de destinos: " + e.getMessage());
+        }
+
+        return listaDestinos;
+    }
 }

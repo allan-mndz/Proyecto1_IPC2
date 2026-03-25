@@ -45,7 +45,7 @@ public class LectorDatos {
                     procesarPago(linea);
                 } else if (linea.startsWith("PAQUETE:")) {
                     procesarPaquete(linea);
-                } else if (linea.startsWith("PROVEEDORE:")) {
+                } else if (linea.startsWith("PROVEEDORES:")) {
                     procesarProveedor(linea);
                 } else if (linea.startsWith("RESERVACIONE:")) {
                     procesarReservacion(linea);

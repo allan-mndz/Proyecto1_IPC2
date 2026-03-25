@@ -25,4 +25,30 @@ public class ServicioPaqueteDAO {
             return false;
         }
     }
+
+    public java.util.List<com.example.proyecto1.modelos.ServicioPaquete> obtenerServiciosPorPaquete(String nombreDelPaquete) {
+        java.util.List<com.example.proyecto1.modelos.ServicioPaquete> listaServicios = new java.util.ArrayList<>();
+
+        String sql = "SELECT * FROM Servicio_Paquete WHERE paquete_nombre = ?";
+
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+             ps.setString(1, nombreDelPaquete);
+
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    com.example.proyecto1.modelos.ServicioPaquete sp = new com.example.proyecto1.modelos.ServicioPaquete();
+                    sp.setPaqueteNombre(rs.getString("paquete_nombre"));
+                    sp.setProveedorNombre(rs.getString("proveedor_nombre"));
+                    sp.setDescripcion(rs.getString("descripcion"));
+                    sp.setCosto(rs.getDouble("costo"));
+                    listaServicios.add(sp);
+                }
+            }
+        } catch (java.sql.SQLException e) {
+            System.out.println("Error al obtener servicios por paquete: " + e.getMessage());
+        }
+
+        return listaServicios;
+    }
 }

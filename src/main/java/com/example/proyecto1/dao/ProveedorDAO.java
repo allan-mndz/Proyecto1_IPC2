@@ -26,4 +26,32 @@ public class ProveedorDAO {
             return false;
         }
     }
+
+    public java.util.List<com.example.proyecto1.modelos.Proveedor> obtenerTodosLosProveedores() {
+        java.util.List<Proveedor> listaProveedores = new java.util.ArrayList<>();
+
+        String sql = "SELECT * FROM Proveedores";
+
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Proveedor p = new Proveedor();
+
+                // Llenamos el objeto con los datos de la fila actual
+                p.setNombre(rs.getString("nombre"));
+                p.setTipo(rs.getInt("tipo"));
+                p.setPais(rs.getString("pais"));
+                p.setContacto(rs.getString("contacto"));
+
+                listaProveedores.add(p);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el catálogo de proveedores: " + e.getMessage());
+        }
+
+        return listaProveedores;
+    }
 }

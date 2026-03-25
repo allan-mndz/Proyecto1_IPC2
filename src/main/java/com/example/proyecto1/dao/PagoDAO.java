@@ -25,4 +25,33 @@ public class PagoDAO {
            return false;
        }
     }
+
+    public java.util.List<com.example.proyecto1.modelos.Pago> obtenerPagosPorReservacion(String numeroReservacion) {
+        String sql = "SELECT id_pago, numero_reservacion, monto, metodo, fecha FROM Pagos WHERE numero_reservacion = ?";
+        java.util.List<com.example.proyecto1.modelos.Pago> pagos = new java.util.ArrayList<>();
+
+        try(Connection con = Conexion.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, numeroReservacion);
+            try(java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    com.example.proyecto1.modelos.Pago pago = new com.example.proyecto1.modelos.Pago();
+                    pago.setIdPago(rs.getInt("id_pago"));
+                    pago.setNumeroReservacion(rs.getString("numero_reservacion"));
+                    pago.setMonto(rs.getDouble("monto"));
+                    pago.setMetodo(rs.getInt("metodo"));
+
+                    java.sql.Date fechaSQL = rs.getDate("fecha");
+                    if (fechaSQL != null) {
+                        pago.setFecha(fechaSQL.toLocalDate());
+                    }
+                    pagos.add(pago);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener los pagos: " + e.getMessage());
+        }
+        return pagos;
+    }
 }
