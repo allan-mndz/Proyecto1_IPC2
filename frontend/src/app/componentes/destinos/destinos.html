@@ -1,0 +1,69 @@
+<div class="destinos-contenedor">
+    <h2 class="titulo-seccion">Crear nuevo destino</h2>
+    <form class="formulario-destino">
+    
+    <div class="form-grupo">
+    <label>Nombre del Destino</label>
+    <input type="text" name="nombre" [(ngModel)]="nuevoDestino.nombre" placeholder="Ejemplo. Fuentes Georginas">
+    </div>
+
+    <div class="form-grupo">
+    <label>País</label>
+    <input type="text" name="pais" [(ngModel)]="nuevoDestino.pais" placeholder="Ejemplo. Guatemala">
+    </div>
+
+    <div class="form-grupo">
+    <label>Descripción General</label>
+    <input type="text" name="descripcion" [(ngModel)]="nuevoDestino.descripcion" placeholder="Describe los atractivos del lugar...">
+    </div>
+
+    <div class="form-grupo">
+    <label>Clima y Mejor Época</label>
+    <input type="text" name="clima" [(ngModel)]="nuevoDestino.clima" placeholder="Ejemplo. Frío">
+    </div>
+
+    <div class="form-acciones form-grupo-completo">
+    <button type="button" class="btn-guardar" (click)="guardarDestino()">
+        @if (editando) {
+            Actualizar Destino
+        } @else {
+            Guardar Destino
+        }
+    </button>
+
+    @if (editando) {
+      <button type="button" class="btn-eliminar" style="margin-left: 10px;" (click)="limpiarFormulario()">Cancelar</button>
+    }
+    </div>
+
+    </form>
+</div>
+
+<div class="tabla-contenedor">
+  <h3 class="titulo-seccion">Catálogo de Destinos</h3>
+  
+  <table class="tabla-destinos">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>País</th>
+        <th>Clima</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      @for (destino of listaDestinos; track destino.nombre) {
+        <tr>
+          <td><strong>{{ destino.nombre }}</strong></td>
+          <td>{{ destino.pais }}</td>
+          <td>{{ destino.clima }}</td>
+          <td>
+            <button class="btn-editar" (click)="cargarDatosParaEditar(destino)">Editar</button>
+            <button class="btn-eliminar" (click)="eliminarDestino(destino.nombre)">Eliminar</button>
+          </td>
+        </tr>
+      } 
+    </tbody>
+  </table>
+</div>

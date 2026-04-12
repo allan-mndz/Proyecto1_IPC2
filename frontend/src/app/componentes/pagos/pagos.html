@@ -1,0 +1,61 @@
+<div class="destinos-contenedor">
+  <h2 class="titulo-seccion">Módulo de Pagos</h2>
+
+  <form class="formulario-destino">
+    <div class="form-grupo form-grupo-completo">
+      <label>Número de Reservación</label>
+      <input type="text" name="numeroReservacion" [(ngModel)]="nuevoPago.numeroReservacion" (blur)="buscarPagos()" placeholder="Ej. RES-168502830" >
+    </div>
+
+    <div class="form-grupo">
+      <label>Monto a Pagar</label>
+      <input name="monto" [(ngModel)]="nuevoPago.monto" placeholder="0.00">
+    </div>
+
+    <div class="form-grupo">
+      <label>Método de Pago</label>
+      <select name="metodo" [(ngModel)]="nuevoPago.metodo">
+        <option [ngValue]="1">1 - Efectivo</option>
+        <option [ngValue]="2">2 - Tarjeta</option>
+        <option [ngValue]="3">3 - Transferencia</option>
+      </select>
+    </div>
+
+    <div class="form-grupo">
+      <label>Fecha del Pago</label>
+      <input type="date" name="fecha" [(ngModel)]="nuevoPago.fecha" disabled>
+    </div>
+
+    <div class="form-acciones form-grupo-completo">
+      <button type="button" class="btn-guardar" (click)="registrarPago()">Registrar Pago</button>
+    </div>
+  </form>
+</div>
+
+<div class="tabla-contenedor" style="margin-top: 30px;">
+  <h3 class="titulo-seccion">Historial de Pagos de la Reservación</h3>
+  <table class="tabla-destinos">
+    <thead>
+      <tr>
+        <th>ID Pago</th>
+        <th>Fecha</th>
+        <th>Método</th>
+        <th>Monto</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (pago of listaPagos; track pago.idPago) {
+        <tr>
+          <td>#{{ pago.idPago }}</td>
+          <td>{{ pago.fecha }}</td>
+          <td>
+            @if(pago.metodo == 1) { Efectivo }
+            @if(pago.metodo == 2) { Tarjeta }
+            @if(pago.metodo == 3) { Transferencia }
+          </td>
+          <td><strong>Q. {{ pago.monto }}</strong></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

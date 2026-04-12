@@ -1,0 +1,21 @@
+<div class="Login-contenedor">
+    <div class="login-tarjeta">
+        <h2 class="login-titulo">Agencia de Viajes</h2>
+
+        <form>
+            <div class="grupo-formulario">
+                <label>Usuario</label>
+                <input type="text" class="login-input" placeholder="Ingrese su Usuario"
+                name="nombre" [(ngModel)]="credenciales.nombre">
+            </div>
+
+            <div class="grupo-formulario">
+                <label>Contraseña</label>
+                <input type="password" class="login-input" placeholder="Ingrese su Contraseña"
+                name="password" [(ngModel)]="credenciales.password">
+            </div>
+
+            <button type="button" class="login-boton" (click)="iniciarSesion()">iniciar Sesion</button>
+        </form>
+    </div>
+</div>

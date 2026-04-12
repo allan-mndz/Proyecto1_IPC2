@@ -1,0 +1,71 @@
+<div class="destinos-contenedor"> <h2 class="titulo-seccion">Gestión de Proveedores</h2>
+  
+  <form class="formulario-destino">
+    <div class="form-grupo">
+      <label>Nombre del Proveedor</label>
+      <input type="text" name="nombre" [(ngModel)]="nuevoProveedor.nombre" [disabled]="editando" placeholder="Ej. Aurora Aerolinea">
+    </div>
+
+    <div class="form-grupo">
+      <label>Tipo de Servicio</label>
+      <select name="tipo" [(ngModel)]="nuevoProveedor.tipo">
+        <option [ngValue]="1">1 - Aerolínea</option>
+        <option [ngValue]="2">2 - Hotel</option>
+        <option [ngValue]="3">3 - Tour</option>
+        <option [ngValue]="4">4 - Traslado</option>
+        <option [ngValue]="5">5 - Otro</option>
+      </select>
+    </div>
+
+    <div class="form-grupo">
+      <label>País de Operación</label>
+      <input type="text" name="pais" [(ngModel)]="nuevoProveedor.pais" placeholder="Ej. Guatemala">
+    </div>
+
+    <div class="form-grupo">
+      <label>Datos de Contacto</label>
+      <input type="text" name="contacto" [(ngModel)]="nuevoProveedor.contacto" placeholder="Teléfono o Email">
+    </div>
+
+    <div class="form-acciones form-grupo-completo">
+      <button type="button" class="btn-guardar" (click)="guardarProveedor()">
+        @if (editando) { 
+          Actualizar 
+        }@else { 
+          Guardar 
+        }
+      </button>
+      @if (editando) {
+        <button type="button" class="btn-eliminar" style="margin-left: 10px;" (click)="limpiarFormulario()">Cancelar</button>
+      }
+    </div>
+  </form>
+</div>
+
+<div class="tabla-contenedor">
+  <table class="tabla-destinos">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>País</th>
+        <th>Contacto</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (prov of listaProveedores; track prov.nombre) {
+        <tr>
+          <td><strong>{{ prov.nombre }}</strong></td>
+          <td>{{ prov.tipo }}</td>
+          <td>{{ prov.pais }}</td>
+          <td>{{ prov.contacto }}</td>
+          <td>
+            <button class="btn-editar" (click)="cargarDatosParaEditar(prov)">Editar</button>
+            <button class="btn-eliminar" (click)="eliminarProveedor(prov.nombre)">Eliminar</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

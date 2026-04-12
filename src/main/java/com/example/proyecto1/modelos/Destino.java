@@ -5,17 +5,17 @@ public class Destino {
     private String pais;
     private String descripcion;
     private String clima;
-    private String imagenUrl;
+    private String imagen;
 
     public Destino() {
     }
 
-    public Destino(String nombre, String pais, String descripcion, String clima, String imagenUrl) {
+    public Destino(String nombre, String pais, String descripcion, String clima, String imagen) {
         this.nombre = nombre;
         this.pais = pais;
         this.descripcion = descripcion;
         this.clima = clima;
-        this.imagenUrl = imagenUrl;
+        this.imagen= imagen;
     }
 
     public String getNombre() {
@@ -50,11 +50,11 @@ public class Destino {
         this.clima = clima;
     }
 
-    public String getImagenUrl() {
-        return imagenUrl;
+    public String getImagen() {
+        return imagen;
     }
 
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
+    public void setImagen(String imagenUrl) {
+        this.imagen = imagenUrl;
     }
 }

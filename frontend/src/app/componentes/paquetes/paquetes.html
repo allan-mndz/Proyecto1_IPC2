@@ -1,0 +1,135 @@
+<div class="destinos-contenedor">
+  <h2 class="titulo-seccion">Armar Paquete Turístico</h2>
+  
+  <form class="formulario-destino">
+    <div class="form-grupo-completo">
+      <h4 class="titulo-seccion">1. Datos Generales</h4>
+      
+      <div class="formulario-destino"> <div class="form-grupo">
+          <label>Nombre del Paquete</label>
+          <input type="text" [(ngModel)]="nuevoPaquete.nombre" name="nombre" placeholder="Ej. Caribe Mágico 7 noches">
+        </div>
+
+        <div class="form-grupo">
+          <label>Destino Principal</label>
+          <select [(ngModel)]="nuevoPaquete.destinoNombre" name="destino">
+            <option value="">-- Selecciona un destino --</option>
+            @for (dest of listaDestinos; track dest.nombre) {
+              <option [value]="dest.nombre">{{ dest.nombre }} ({{ dest.pais }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-grupo-tercio">
+          <label>Duración (Días)</label>
+          <input type="number" [(ngModel)]="nuevoPaquete.duracion" name="duracion">
+        </div>
+
+        <div class="form-grupo-tercio">
+          <label>Precio de Venta</label>
+          <input type="number" [(ngModel)]="nuevoPaquete.precio" name="precio">
+        </div>
+
+        <div class="form-grupo-tercio">
+          <label>Capacidad Máxima</label>
+          <input type="number" [(ngModel)]="nuevoPaquete.capacidad" name="capacidad">
+        </div>
+
+        <div class="form-grupo form-grupo-completo">
+          <label>Descripción General</label>
+          <input type="text" [(ngModel)]="nuevoPaquete.descripcion" name="descripcion">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grupo-completo">
+      <h4 class="titulo-seccion">2. Servicios Incluidos</h4>
+      
+      <div class="fila-servicios">
+        <div class="form-grupo flex-2">
+          <label class="label-pequeno">Proveedor</label>
+          <select [(ngModel)]="servicioTemporal.proveedorNombre" name="provTemp">
+            <option value="">-- Seleccionar --</option>
+            @for (prov of listaProveedores; track prov.nombre) {
+              <option [value]="prov.nombre">{{ prov.nombre }}</option>
+            }
+          </select>
+        </div>
+        
+        <div class="form-grupo flex-3">
+          <label class="label-pequeno">Descripción del servicio</label>
+          <input type="text" [(ngModel)]="servicioTemporal.descripcion" name="descTemp" placeholder="Ej. Vuelo redondo...">
+        </div>
+        
+        <div class="form-grupo flex-1">
+          <label class="label-pequeno">Costo (Q)</label>
+          <input type="number" [(ngModel)]="servicioTemporal.costo" name="costoTemp">
+        </div>
+        
+        <div>
+          <button type="button" class="btn-editar" (click)="agregarServicio()">+ Agregar</button>
+        </div>
+      </div>
+
+      <table class="tabla-destinos">
+        <thead>
+          <tr>
+            <th>Proveedor</th>
+            <th>Descripción</th>
+            <th>Costo Agencia</th>
+            <th>Quitar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (serv of nuevoPaquete.servicios; track $index) {
+            <tr>
+              <td>{{ serv.proveedorNombre }}</td>
+              <td>{{ serv.descripcion }}</td>
+              <td>Q. {{ serv.costo }}</td>
+              <td><button type="button" class="btn-eliminar" (click)="eliminarServicio($index)">Quitar</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-acciones form-grupo-completo mt-40">
+      <button type="button" class="btn-guardar btn-bloque" (click)="guardarPaquete()">
+        Crear Paquete Turístico
+      </button>
+    </div>
+  </form>
+
+  <div class="tabla-contenedor mt-40">
+      <h3 class="titulo-seccion">Catálogo de Paquetes Turísticos</h3>
+      
+      <table class="tabla-destinos">
+        <thead>
+          <tr>
+            <th>Nombre del Paquete</th>
+            <th>Destino</th>
+            <th>Duración</th>
+            <th>Precio Venta</th>
+            <th>Capacidad</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (paq of listaPaquetes; track paq.nombre) {
+            <tr>
+              <td><strong>{{ paq.nombre }}</strong></td>
+              <td>{{ paq.destinoNombre }}</td>
+              <td>{{ paq.duracion }} días</td>
+              <td>Q. {{ paq.precio }}</td>
+              <td>{{ paq.capacidad }} pers.</td>
+              <td>{{ paq.estado === 1 ? 'Activo' : 'Inactivo' }}    </td>
+              <td>
+                <button type="button" class="btn-eliminar">Desactivar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+</div>

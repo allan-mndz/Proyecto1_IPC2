@@ -9,6 +9,9 @@ public class Paquete {
     private int capacidad;
     private int estado; // 1 = Activo, 0 = Inactivo
 
+    private java.util.List<ServicioPaquete> servicios;
+
+
     public Paquete() {
     }
 
@@ -77,4 +80,10 @@ public class Paquete {
     public void setEstado(int estado) {
         this.estado = estado;
     }
+
+    public java.util.List<ServicioPaquete> getServicios() { return servicios; }
+
+    public void setServicios(java.util.List<ServicioPaquete> servicios) { this.servicios = servicios; }
+
+
 }

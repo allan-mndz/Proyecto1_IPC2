@@ -1,0 +1,69 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Módulo Financiero y Reportes</h2>
+  
+  <div class="card p-4 mb-4 shadow-sm">
+    <div class="row">
+      <div class="col-md-4 form-group">
+        <label class="font-weight-bold">Selecciona el Reporte a Generar</label>
+        <select name="tipo" [(ngModel)]="configReporte.tipo">
+          <option value="1">1. Reporte de Ventas</option>
+          <option value="2">2. Reporte de Cancelaciones</option>
+          <option value="3">3. Reporte de Ganancias (Bruto y Neto)</option>
+          <option value="4">4. Agente con MÁS Ventas (Detalle)</option>
+          <option value="5">5. Agente con MÁS Ganancias generadas</option>
+          <option value="6">6. Paquete MÁS Vendido (Detalle)</option>
+          <option value="7">7. Paquete MENOS Vendido (Detalle)</option>
+          <option value="8">8. Ocupación por Destino</option>
+        </select>
+      </div>
+
+      <div class="col-md-3 form-group">
+        <label class="font-weight-bold">Fecha de Inicio</label>
+        <input type="date" class="form-control" [(ngModel)]="configReporte.inicio">
+      </div>
+
+      <div class="col-md-3 form-group">
+        <label class="font-weight-bold">Fecha de Fin</label>
+        <input type="date" class="form-control" [(ngModel)]="configReporte.fin">
+      </div>
+
+      <div class="col-md-2 form-group d-flex align-items-end">
+        <button class="btn btn-primary w-100" (click)="generarVistaPrevia()">Ver Datos</button>
+      </div>
+    </div>
+  </div>
+
+  @if (datosReporte.length > 0) {
+    <div class="card p-4 shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Vista Previa del Reporte</h4>
+        <button class="btn btn-danger" (click)="exportarPDF()">Descargar PDF</button>
+      </div>
+      
+      <p><strong>Generado por:</strong> {{ nombreAuthor }} | <strong>Fecha:</strong> {{ fechaNow }}</p>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th>#</th>
+              @for (col of columnas; track col) {
+                <th>{{ col.replace('_', ' ') | uppercase }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (fila of datosReporte; track $index) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                @for (col of columnas; track col) {
+                  <td>{{ fila[col] }}</td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

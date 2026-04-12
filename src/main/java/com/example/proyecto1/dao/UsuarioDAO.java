@@ -10,8 +10,6 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
 
-    // metodo para guardar un nuevo usuario en la base de datos
-
     public boolean insertarUsuario(Usuario usuario) {
         // La consulta SQL con signos de interrogación para evitar inyección SQL
         String sql = "INSERT INTO Usuarios (nombre, password, tipo) VALUES (?, ?, ?)";
@@ -22,7 +20,7 @@ public class UsuarioDAO {
             // Reemplazamos los signos de interrogación con los datos del objeto Java
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getPassword());
-            ps.setInt(3, usuario.getTipo()); // 1: Atención, 2: Operaciones, 3: Admin
+            ps.setInt(3, usuario.getTipo());
 
             // Ejecutamos la inserción. Si retorna mayor a 0, significa que se insertó la fila.
             int filasAfectadas = ps.executeUpdate();
@@ -33,8 +31,6 @@ public class UsuarioDAO {
             return false;
         }
     }
-
-    // Metodo para buscar un usuario por su nombre
 
     public Usuario obtenerUsuario(String nombreUsuario) {
         String sql = "SELECT * FROM Usuarios WHERE nombre = ?";
@@ -59,7 +55,27 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             System.out.println("Error al obtener usuario: " + e.getMessage());
         }
-
         return usuario;
+    }
+
+    public java.util.List<Usuario> obtenerTodosLosUsuarios() {
+        java.util.List<Usuario> lista = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM Usuarios";
+
+        try (java.sql.Connection con = Conexion.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setNombre(rs.getString("nombre"));
+                u.setPassword(rs.getString("password"));
+                u.setTipo(rs.getInt("tipo"));
+                lista.add(u);
+            }
+        } catch (java.sql.SQLException e) {
+            System.out.println("Error al obtener usuarios: " + e.getMessage());
+        }
+        return lista;
     }
 }

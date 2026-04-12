@@ -35,24 +35,24 @@ public class LectorDatos {
                     continue;
                 }
 
-                if (linea.startsWith("USUARIO:")) {
+                if (linea.startsWith("USUARIO(")) {
                     procesarUsuario(linea);
-                } else if (linea.startsWith("CLIENTE:")) {
+                } else if (linea.startsWith("CLIENTE(")) {
                     procesarCliente(linea);
-                } else if (linea.startsWith("DESTINO:")) {
+                } else if (linea.startsWith("DESTINO(")) {
                     procesarDestino(linea);
-                } else if (linea.startsWith("PAGO:")) {
+                } else if (linea.startsWith("PAGO(")) {
                     procesarPago(linea);
-                } else if (linea.startsWith("PAQUETE:")) {
+                } else if (linea.startsWith("PAQUETE(")) {
                     procesarPaquete(linea);
-                } else if (linea.startsWith("PROVEEDORES:")) {
+                } else if (linea.startsWith("PROVEEDOR(")) {
                     procesarProveedor(linea);
-                } else if (linea.startsWith("RESERVACIONE:")) {
+                } else if (linea.startsWith("RESERVACION(")) {
                     procesarReservacion(linea);
-                } else if (linea.startsWith("SERVICIO_PAQUETE:")) {
+                } else if (linea.startsWith("SERVICIO_PAQUETE(")) {
                     procesarServicioPaquete(linea);
-                }else {
-                    System.out.println("Línea no reconocida: " + linea);
+                } else {
+                    System.out.println("Línea ignorada o no reconocida: " + linea);
                 }
             }
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class LectorDatos {
             d.setPais(limpiar(datos[1]));
             d.setDescripcion(limpiar(datos[2]));
             d.setClima("ND");
-            d.setImagenUrl("ND");
+            d.setImagen("ND");
             destinoDAO.insertarDestino(d);
         }catch (Exception e){
             System.out.println("Error al procesar DESTINO: " + linea);
@@ -124,9 +124,9 @@ public class LectorDatos {
             p.setDuracion(Integer.parseInt(limpiar(datos[2])));
             p.setPrecio(Double.parseDouble(limpiar(datos[3])));
             p.setCapacidad(Integer.parseInt(limpiar(datos[4])));
-            p.setDescripcion("ND"); // El archivo no lo trae
+            p.setDescripcion("ND");
             p.setEstado(1); // 1 = Activo por defecto
-            paqueteDAO.insertarPaquete(p);
+            paqueteDAO.insertarPaqueteConServicios(p);
         } catch (Exception e) { System.out.println("Error Formato PAQUETE: " + linea); }
     }
 
@@ -176,7 +176,7 @@ public class LectorDatos {
             p.setMonto(Double.parseDouble(limpiar(datos[1])));
             p.setMetodo(Integer.parseInt(limpiar(datos[2])));
             p.setFecha(LocalDate.parse(limpiar(datos[3]), formatoFecha));
-            p.setIdPago(0); // El ID no se inserta, es autoincrementable en BD
+            p.setIdPago(0);
             p.setMetodo(p.getMetodo());
             pagoDAO.procesarPago(p);
         } catch (Exception e) { System.out.println("Error Formato PAGO: " + linea); }
@@ -191,6 +191,6 @@ public class LectorDatos {
     }
 
     private String limpiar(String dato) {
-        return dato.replace("\"", "");
+        return dato.replace("\"", "").trim();
     }
 }

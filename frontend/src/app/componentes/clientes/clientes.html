@@ -1,0 +1,72 @@
+<div class="destinos-contenedor">
+  <h2 class="titulo-seccion">Registro de Clientes</h2>
+  <form class="formulario-destino">
+    
+    <div class="form-grupo form-grupo-completo">
+      <label>DPI del Cliente</label>
+      <input type="text" name="dpi" [(ngModel)]="nuevoCliente.dpi" (blur)="buscarPorDPI()" [disabled]="editando" placeholder="Ej. 1234567890101" style="max-width: 300px;">
+    </div>
+    
+    <div class="form-grupo">
+      <label>Nombre Completo</label>
+      <input type="text" name="nombre" [(ngModel)]="nuevoCliente.nombre">
+    </div>
+
+    <div class="form-grupo">
+      <label>Fecha de Nacimiento</label>
+      <input type="date" name="fechaNacimiento" [(ngModel)]="nuevoCliente.fechaNacimiento">
+    </div>
+
+    <div class="form-grupo">
+      <label>Teléfono</label>
+      <input type="text" name="telefono" [(ngModel)]="nuevoCliente.telefono">
+    </div>
+
+    <div class="form-grupo">
+      <label>Correo Electrónico (Email)</label>
+      <input type="email" name="email" [(ngModel)]="nuevoCliente.email">
+    </div>
+
+    <div class="form-grupo form-grupo-completo">
+      <label>Nacionalidad</label>
+      <input type="text" name="nacionalidad" [(ngModel)]="nuevoCliente.nacionalidad" placeholder="Ej. Guatemalteco" style="max-width: 300px;">
+    </div>
+
+    <div class="form-acciones form-grupo-completo">
+      <button type="button" class="btn-guardar" (click)="guardarCliente()">
+        @if (editando) { 
+          Actualizar Cliente 
+        } @else { 
+          Registrar Cliente 
+        }
+      </button>
+      @if (editando) {
+        <button type="button" class="btn-eliminar" style="margin-left: 10px;" (click)="limpiarFormulario()">Cancelar</button>
+      }
+    </div>
+  </form>
+</div>
+
+<div class="tabla-contenedor">
+  <h3 class="titulo-seccion">Directorio de Clientes</h3>
+  <table class="tabla-destinos">
+    <thead>
+      <tr>
+        <th>DPI</th>
+        <th>Nombre Completo</th>
+        <th>Teléfono</th>
+        <th>Correo</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cli of listaClientes; track cli.dpi) {
+        <tr>
+          <td><strong>{{ cli.dpi }}</strong></td>
+          <td>{{ cli.nombre }}</td>
+          <td>{{ cli.telefono }}</td>
+          <td>{{ cli.email }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

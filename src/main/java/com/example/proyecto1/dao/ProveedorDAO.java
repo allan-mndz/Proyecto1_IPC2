@@ -54,4 +54,36 @@ public class ProveedorDAO {
 
         return listaProveedores;
     }
+
+    public boolean actualizarProveedor(Proveedor proveedor) {
+        String sql = "UPDATE Proveedores SET tipo = ?, pais = ?, contacto = ? WHERE nombre = ?";
+        try (Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, proveedor.getTipo());
+            pstmt.setString(2, proveedor.getPais());
+            pstmt.setString(3, proveedor.getContacto());
+            pstmt.setString(4, proveedor.getNombre());
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean eliminarProveedor(String nombre) {
+        String sql = "DELETE FROM Proveedores WHERE nombre = ?";
+        try (Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, nombre);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }

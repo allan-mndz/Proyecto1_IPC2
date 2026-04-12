@@ -1,0 +1,99 @@
+/* Divide la pantalla en dos columnas */
+.dashboard-contenedor {
+    display: flex;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+/* Diseño del Menú Lateral */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.sidebar-titulo {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.separador {
+    border: 1px solid #34495e;
+    margin-bottom: 20px;
+    width: 80%;
+}
+
+/* Diseño de la Lista de Opciones */
+.menu-lista {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.menu-link {
+    display: block;
+    color: #ecf0f1;
+    text-decoration: none; /* Quita el subrayado de los links */
+    padding: 12px 25px;
+    font-size: 15px;
+}
+
+/* Efecto al pasar el mouse por encima de una opción */
+.menu-link:hover {
+    background-color: #34495e;
+    padding-left: 20px; 
+}
+
+.menu-admin {
+    color: #ecf0f1;
+}
+
+.btn-salir {
+    width: 100%;
+    padding: 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-salir:hover {
+    background-color: #c0392b;
+}
+
+/* Diseño del Área de Trabajo */
+.contenido-principal {
+    flex-grow: 1;
+    background-color: #f8f9fa;
+    padding: 40px;
+    overflow-y: auto; /* scroll si la tabla es muy larga */
+}
+
+.titulo-bienvenida {
+    color: #333;
+    margin-top: 0;
+}
+
+.alerta-info {
+    background-color: #e1f5fe;
+    color: #0277bd;
+    padding: 15px 20px;
+    border-radius: 6px;
+    border-left: 5px solid #0288d1;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.texto-ayuda {
+    color: #666;
+    font-size: 15px;
+}

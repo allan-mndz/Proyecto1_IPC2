@@ -1,0 +1,52 @@
+<div class="destinos-contenedor">
+  <h2 class="titulo-seccion">Crear Reservación</h2>
+  
+  <form class="formulario-destino">
+    <div class="form-grupo-completo">
+      <h4 class="titulo-subseccion">1. Identificación del Cliente</h4>
+      <div class="formulario-destino">
+        <div class="form-grupo">
+          <label>DPI del Cliente</label>
+          <input type="text" name="dpi" [(ngModel)]="nuevaReservacion.clienteDpi" (blur)="buscarCliente()" placeholder="Ingresa DPI">
+        </div>
+        <div class="form-grupo">
+          <label>Nombre del Cliente</label>
+          <input type="text" [value]="clienteNombre" disabled>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grupo-completo">
+      <h4 class="titulo-subseccion">2. Detalles del Viaje</h4>
+      <div class="formulario-destino">
+        <div class="form-grupo form-grupo-completo">
+          <label>Paquete Turístico</label>
+          <select name="paquete" [(ngModel)]="nuevaReservacion.paqueteNombre" (change)="calcularTotal()">
+            <option value="">-- Selecciona un paquete --</option>
+            @for (paq of listaPaquetes; track paq.nombre) {
+              <option [value]="paq.nombre">{{ paq.nombre }} (Q. {{ paq.precio }} por persona)</option>
+            }
+          </select>
+        </div>
+        
+        <div class="form-grupo">
+          <label>Fecha de Viaje</label>
+          <input type="date" name="fecha" [(ngModel)]="nuevaReservacion.fechaViaje">
+        </div>
+        
+        <div class="form-grupo">
+          <label>Cantidad de Personas</label>
+          <input type="number" name="cantidad" [(ngModel)]="nuevaReservacion.cantidadPersonas" min="1" (change)="calcularTotal()">
+        </div>
+    
+          <h3 class="total-texto">Total a Pagar: Q. {{ nuevaReservacion.costoTotal }}</h3>
+      </div>
+    </div>
+
+    <div class="form-acciones form-grupo-completo mt-40">
+      <button type="button" class="btn-guardar btn-bloque" (click)="guardarReservacion()" [disabled]="!clienteNombre || nuevaReservacion.costoTotal === 0">
+        Confirmar Reservación
+      </button>
+    </div>
+  </form>
+</div>

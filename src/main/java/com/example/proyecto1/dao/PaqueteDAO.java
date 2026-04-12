@@ -7,24 +7,72 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class PaqueteDAO {
-    public boolean insertarPaquete(Paquete paquete){
-        String sql = "INSERT INTO Paquetes (nombre, destino_nombre, duracion, descripcion, precio, capacidad, estado) VALUES (?,?,?,?,?,?,?')";
-        try(Connection con = Conexion.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setString(1, paquete.getNombre());
-            ps.setString(2, paquete.getDestinoNombre());
-            ps.setInt(3, paquete.getDuracion());
-            ps.setString(4, paquete.getDescripcion());
-            ps.setDouble(5, paquete.getPrecio());
-            ps.setInt(6, paquete.getCapacidad());
-            ps.setInt(7, paquete.getEstado());
 
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0;
+    public boolean insertarPaqueteConServicios(com.example.proyecto1.modelos.Paquete paquete) {
+        String sqlPaquete = "INSERT INTO Paquetes (nombre, destino_nombre, duracion, descripcion, precio, capacidad, estado) VALUES (?,?,?,?,?,?,?)";
+        String sqlServicio = "INSERT INTO Servicio_Paquete (paquete_nombre, proveedor_nombre, descripcion, costo) VALUES (?,?,?,?)";
 
-        } catch (Exception e) {
-            System.out.println("Error al insertar paquete: " + e.getMessage());
+        java.sql.Connection conn = null;
+
+        try {
+            conn = com.example.proyecto1.config.Conexion.getConnection();
+
+            // INICIAMOS LA TRANSACCIÓN
+            // Esto le dice a MySQL que no guarde nada definitivamente hasta que le demos permiso.
+            conn.setAutoCommit(false);
+
+            // GUARDAMOS EL PAQUETE PRINCIPAL
+            try (java.sql.PreparedStatement psPaquete = conn.prepareStatement(sqlPaquete)) {
+                psPaquete.setString(1, paquete.getNombre());
+                psPaquete.setString(2, paquete.getDestinoNombre());
+                psPaquete.setInt(3, paquete.getDuracion());
+                psPaquete.setString(4, paquete.getDescripcion());
+                psPaquete.setDouble(5, paquete.getPrecio());
+                psPaquete.setInt(6, paquete.getCapacidad());
+                psPaquete.setInt(7, 1); // Asumimos que 1 es Activo
+
+                psPaquete.executeUpdate();
+            }
+
+            // GUARDAMOS TODOS LOS SERVICIOS DE LA LISTA
+            if (paquete.getServicios() != null && !paquete.getServicios().isEmpty()) {
+                try (java.sql.PreparedStatement psServicio = conn.prepareStatement(sqlServicio)) {
+                    for (com.example.proyecto1.modelos.ServicioPaquete servicio : paquete.getServicios()) {
+                        psServicio.setString(1, paquete.getNombre()); // Lo enlazamos al paquete
+                        psServicio.setString(2, servicio.getProveedorNombre());
+                        psServicio.setString(3, servicio.getDescripcion());
+                        psServicio.setDouble(4, servicio.getCosto());
+                        psServicio.executeUpdate();
+                    }
+                }
+            }
+
+            // CONFIRMAMOS LA TRANSACCIÓN
+            // le decimos a MySQL que salio todo bien, que ahora sí guarde todo definitivamente.
+            conn.commit();
+            return true;
+
+        } catch (java.sql.SQLException e) {
+            if (conn != null) {
+                try {
+                    // hacemos un ROLLBACK. Esto deshace todo, como si nada hubiera pasado.
+                    conn.rollback();
+                } catch (java.sql.SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            System.out.println("Error en transacción al insertar paquete: " + e.getMessage());
             return false;
+        } finally {
+            // devolvemos la conexión a su estado normal antes de cerrarla
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (java.sql.SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -49,7 +97,7 @@ public class PaqueteDAO {
                 p.setCapacidad(rs.getInt("capacidad"));
                 p.setEstado(rs.getInt("estado"));
 
-                // Agregamos el paquete armado a nuestra caja (lista)
+                // Agregamos el paquete armado a nuestra lista de paquetes
                 listaPaquetes.add(p);
             }
 

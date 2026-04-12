@@ -19,7 +19,7 @@ public class DestinoDAO {
             ps.setString(2, destino.getPais());
             ps.setString(3, destino.getDescripcion());
             ps.setString(4, destino.getClima());
-            ps.setString(5, destino.getImagenUrl());
+            ps.setString(5, destino.getImagen());
 
             int filasAfectadas = ps.executeUpdate();
             return filasAfectadas > 0;
@@ -47,7 +47,7 @@ public class DestinoDAO {
                 d.setPais(rs.getString("pais"));
                 d.setDescripcion(rs.getString("descripcion"));
                 d.setClima(rs.getString("clima"));
-                d.setImagenUrl(rs.getString("imagen_url"));
+                d.setImagen(rs.getString("imagen_url"));
 
                 listaDestinos.add(d);
             }
@@ -57,5 +57,45 @@ public class DestinoDAO {
         }
 
         return listaDestinos;
+    }
+
+    public boolean eliminarDestino(String nombre) {
+        String sql = "DELETE FROM Destinos WHERE nombre = ?";
+
+        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+             java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, nombre);
+
+            int filasAfectadas = pstmt.executeUpdate();
+
+            return filasAfectadas > 0;
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean actualizarDestino(Destino destino) {
+        String sql = "UPDATE Destinos SET pais = ?, descripcion = ?, clima = ?, imagen_url = ? WHERE nombre = ?";
+
+        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+             java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, destino.getPais());
+            pstmt.setString(2, destino.getDescripcion());
+            pstmt.setString(3, destino.getClima());
+            pstmt.setString(4, destino.getImagen());
+
+            pstmt.setString(5, destino.getNombre());
+
+            int filasAfectadas = pstmt.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

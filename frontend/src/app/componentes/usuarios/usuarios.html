@@ -1,0 +1,53 @@
+<div class="destinos-contenedor">
+  <h2 class="titulo-seccion">Gestión de Usuarios</h2>
+
+  <form class="formulario-destino">
+    
+    <div class="form-grupo">
+      <label>Nombre de Usuario (Nickname)</label>
+      <input type="text" name="nombre" [(ngModel)]="nuevoUsuario.nombre">
+    </div>
+
+    <div class="form-grupo">
+      <label>Contraseña</label>
+      <input type="password" name="password" [(ngModel)]="nuevoUsuario.password">
+    </div>
+
+    <div class="form-grupo">
+      <label>Rol del Sistema</label>
+      <select name="tipo" [(ngModel)]="nuevoUsuario.tipo">
+        <option [ngValue]="1">1 - Atención al Cliente</option>
+        <option [ngValue]="2">2 - Área de Operaciones</option>
+        <option [ngValue]="3">3 - Administrador Global</option>
+      </select>
+    </div>
+
+    <div class="form-acciones">
+      <button type="button" class="btn-guardar" (click)="guardarUsuario()">Registrar Usuario</button>
+    </div>
+  </form>
+</div>
+
+<div class="tabla-contenedor">
+  <h3 class="titulo-seccion">Directorio de Empleados</h3>
+  <table class="tabla-destinos">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Rol en el Sistema</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of listaUsuarios; track user.nombre) {
+        <tr>
+          <td><strong>{{ user.nombre }}</strong></td>
+          <td>
+            @if(user.tipo == 1) { <span class="etiqueta-rol rol-ventas">Atención al Cliente</span> }
+            @if(user.tipo == 2) { <span class="etiqueta-rol rol-operaciones">Operaciones</span> }
+            @if(user.tipo == 3) { <span class="etiqueta-rol rol-admin">Administrador</span> }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

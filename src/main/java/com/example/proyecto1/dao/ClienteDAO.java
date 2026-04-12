@@ -63,4 +63,50 @@ public class ClienteDAO {
 
         return listaClientes;
     }
+
+    public Cliente obtenerClientePorDpi(String dpi) {
+        String sql = "SELECT * FROM Clientes WHERE dpi = ?";
+        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, dpi);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cliente c = new Cliente();
+                    c.setDpi(rs.getString("dpi"));
+                    c.setNombre(rs.getString("nombre"));
+                    java.sql.Date fechaSQL = rs.getDate("fecha_nacimiento");
+                    if (fechaSQL != null) {
+                        c.setFechaNacimiento(fechaSQL.toLocalDate());
+                    }
+                    c.setTelefono(rs.getString("telefono"));
+                    c.setEmail(rs.getString("email"));
+                    c.setNacionalidad(rs.getString("nacionalidad"));
+                    return c; // Retornamos el cliente si lo encontramos
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener cliente por DPI: " + e.getMessage());
+        }
+        return null; // Retornamos nulo si no existe
+    }
+
+    public boolean actualizarCliente(Cliente cliente) {
+        String sql = "UPDATE Clientes SET nombre=?, fecha_nacimiento=?, telefono=?, email=?, nacionalidad=? WHERE dpi=?";
+        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, cliente.getNombre());
+            ps.setDate(2, java.sql.Date.valueOf(cliente.getFechaNacimiento()));
+            ps.setString(3, cliente.getTelefono());
+            ps.setString(4, cliente.getEmail());
+            ps.setString(5, cliente.getNacionalidad());
+            ps.setString(6, cliente.getDpi()); // El DPI va al final para buscarlo
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println("Error al actualizar cliente: " + e.getMessage());
+            return false;
+        }
+    }
 }

@@ -1,0 +1,36 @@
+<div class="dashboard-contenedor">
+  
+  <nav class="sidebar">
+    <h2 class="sidebar-titulo">Agencia de Viajes</h2>
+    <hr class="separador">
+    
+    <ul class="menu-lista">
+      @if (rol === 1 || rol === 3) {
+        <li><a routerLink="./clientes" class="menu-link">Clientes</a></li>
+        <li><a routerLink="./reservaciones" class="menu-link">Reservaciones</a></li>
+        <li><a routerLink="./pagos" class="menu-link">Pagos</a></li>
+      }
+
+      @if (rol === 2 || rol === 3) {
+        <li><a routerLink="./destinos" class="menu-link">Destinos</a></li>
+        <li><a routerLink="./paquetes" class="menu-link">Paquetes</a></li>
+        <li><a routerLink="./proveedores" class="menu-link">Proveedores</a></li>
+      }
+
+      @if (rol === 3) {
+        <li><a routerLink="./reportes" class="menu-link menu-admin">Reportes</a></li>
+        <li><a routerLink="./usuarios" class="menu-link menu-admin">Usuarios</a></li>
+        <li><a routerLink="./cargarDatos" class="menu-link menu-admin">Carga de Datos</a></li>
+      }
+    </ul>
+    
+    <div class="sidebar-footer">
+      <button class="btn-salir" (click)="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+  </nav>
+
+    <main class="contenido-principal">
+        <router-outlet></router-outlet>
+    </main>
+
+</div>

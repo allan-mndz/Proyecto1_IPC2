@@ -1,0 +1,29 @@
+<div class="destinos-contenedor">
+  <h2 class="titulo-seccion">Carga Masiva de Datos</h2>
+
+  <form class="formulario-destino">
+
+    <div class="form-grupo form-grupo-completo zona-carga">
+      <h3 class="titulo-seccion">Selecciona el archivo de entrada</h3>
+      
+      <input type="file" id="inputArchivo" accept=".txt" (change)="seleccionarArchivo($event)" class="input-archivo">
+    </div>
+
+    <div class="form-acciones form-grupo-completo mt-30">
+      <button type="button" class="btn-guardar btn-grande" (click)="subirArchivo()" [disabled]="!archivoSeleccionado">
+        Iniciar Carga de Datos
+      </button>
+    </div>
+
+    @if (mensajePantalla) {
+      <div class="form-grupo-completo alerta" 
+        [ngClass]="{
+          'alerta-exito': mensajePantalla.includes('Listo'), 
+          'alerta-error': mensajePantalla.includes('Error'), 
+          'alerta-info': mensajePantalla.includes('Cargando')
+              }">
+        {{ mensajePantalla }}
+      </div>
+    }
+  </form>
+</div>
