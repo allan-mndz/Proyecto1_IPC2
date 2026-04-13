@@ -24,7 +24,7 @@ public class PaqueteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // Configuramos la carta de respuesta para que sea un JSON
+        // Configuramos la respuesta para que sea un JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();

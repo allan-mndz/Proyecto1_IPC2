@@ -2,27 +2,30 @@ package com.example.proyecto1.dao;
 
 import com.example.proyecto1.config.Conexion;
 import com.example.proyecto1.modelos.Paquete;
+import com.example.proyecto1.modelos.ServicioPaquete;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaqueteDAO {
 
-    public boolean insertarPaqueteConServicios(com.example.proyecto1.modelos.Paquete paquete) {
+    public boolean insertarPaqueteConServicios(Paquete paquete) {
         String sqlPaquete = "INSERT INTO Paquetes (nombre, destino_nombre, duracion, descripcion, precio, capacidad, estado) VALUES (?,?,?,?,?,?,?)";
         String sqlServicio = "INSERT INTO Servicio_Paquete (paquete_nombre, proveedor_nombre, descripcion, costo) VALUES (?,?,?,?)";
 
-        java.sql.Connection conn = null;
+        Connection conn = null;
 
         try {
-            conn = com.example.proyecto1.config.Conexion.getConnection();
+            conn = Conexion.getConnection();
 
-            // INICIAMOS LA TRANSACCIÓN
-            // Esto le dice a MySQL que no guarde nada definitivamente hasta que le demos permiso.
+            // Esto hace que MySQL no guarde nada hasta que le demos permiso.
             conn.setAutoCommit(false);
 
             // GUARDAMOS EL PAQUETE PRINCIPAL
-            try (java.sql.PreparedStatement psPaquete = conn.prepareStatement(sqlPaquete)) {
+            try (PreparedStatement psPaquete = conn.prepareStatement(sqlPaquete)) {
                 psPaquete.setString(1, paquete.getNombre());
                 psPaquete.setString(2, paquete.getDestinoNombre());
                 psPaquete.setInt(3, paquete.getDuracion());
@@ -36,8 +39,8 @@ public class PaqueteDAO {
 
             // GUARDAMOS TODOS LOS SERVICIOS DE LA LISTA
             if (paquete.getServicios() != null && !paquete.getServicios().isEmpty()) {
-                try (java.sql.PreparedStatement psServicio = conn.prepareStatement(sqlServicio)) {
-                    for (com.example.proyecto1.modelos.ServicioPaquete servicio : paquete.getServicios()) {
+                try (PreparedStatement psServicio = conn.prepareStatement(sqlServicio)) {
+                    for (ServicioPaquete servicio : paquete.getServicios()) {
                         psServicio.setString(1, paquete.getNombre()); // Lo enlazamos al paquete
                         psServicio.setString(2, servicio.getProveedorNombre());
                         psServicio.setString(3, servicio.getDescripcion());
@@ -47,15 +50,13 @@ public class PaqueteDAO {
                 }
             }
 
-            // CONFIRMAMOS LA TRANSACCIÓN
-            // le decimos a MySQL que salio todo bien, que ahora sí guarde todo definitivamente.
+            // confirmamos la transaccion
             conn.commit();
             return true;
 
         } catch (java.sql.SQLException e) {
             if (conn != null) {
                 try {
-                    // hacemos un ROLLBACK. Esto deshace todo, como si nada hubiera pasado.
                     conn.rollback();
                 } catch (java.sql.SQLException ex) {
                     ex.printStackTrace();
@@ -76,17 +77,17 @@ public class PaqueteDAO {
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.Paquete> obtenerTodosLosPaquetes() {
-        java.util.List<com.example.proyecto1.modelos.Paquete> listaPaquetes = new java.util.ArrayList<>();
+    public List<Paquete> obtenerTodosLosPaquetes() {
+       List<Paquete> listaPaquetes = new ArrayList<>();
 
         String sql = "SELECT * FROM Paquetes WHERE estado = 1";
 
-        try (java.sql.Connection con = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement ps = con.prepareStatement(sql);
-             java.sql.ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                com.example.proyecto1.modelos.Paquete p = new com.example.proyecto1.modelos.Paquete();
+                Paquete p = new Paquete();
 
                 // Llenamos el objeto con los datos de la fila actual
                 p.setNombre(rs.getString("nombre"));

@@ -38,15 +38,15 @@ public class CargaDatosServlet extends HttpServlet {
             if (filePart != null && filePart.getSize() > 0) {
                 InputStream fileContent = filePart.getInputStream();
                 lector.procesarArchivo(fileContent);
-                response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_OK);
+                response.setStatus(HttpServletResponse.SC_OK);
                 out.write("{\"mensaje\": \"Archivo procesado exitosamente.\"}");
 
             } else {
-                response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.print("{\"error\": \"No se recibió ningún archivo\"}");
             }
         } catch (Exception e) {
-            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"error\": \"Error interno del servidor: " + e.getMessage() + "\"}");
         }finally {
             out.flush();

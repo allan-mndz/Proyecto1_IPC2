@@ -20,7 +20,7 @@ public class DestinoServlet extends HttpServlet {
     private Gson gson = new Gson();
 
     @Override
-    protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -75,7 +75,6 @@ public class DestinoServlet extends HttpServlet {
         try {
             // El manual dice que el nombre es el identificador único del destino
             String nombreDestino = request.getParameter("nombre");
-
             if (nombreDestino != null && !nombreDestino.isEmpty()) {
                 boolean eliminado = destinoDAO.eliminarDestino(nombreDestino);
 

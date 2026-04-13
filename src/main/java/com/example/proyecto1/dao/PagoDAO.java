@@ -3,9 +3,9 @@ package com.example.proyecto1.dao;
 import com.example.proyecto1.config.Conexion;
 import com.example.proyecto1.modelos.Pago;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PagoDAO {
     public int procesarPago(Pago pago) {
@@ -65,31 +65,35 @@ public class PagoDAO {
                     ex.printStackTrace();
                 }
             }
-            return 0; // 0 = Error
+            return 0;
         } finally {
             if (con != null) {
-                try { con.setAutoCommit(true); con.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try {
+                    con.setAutoCommit(true); con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.Pago> obtenerPagosPorReservacion(String numeroReservacion) {
+    public List<Pago> obtenerPagosPorReservacion(String numeroReservacion) {
         String sql = "SELECT id_pago, numero_reservacion, monto, metodo, fecha FROM Pagos WHERE numero_reservacion = ?";
-        java.util.List<com.example.proyecto1.modelos.Pago> pagos = new java.util.ArrayList<>();
+        List<Pago> pagos = new ArrayList<>();
 
         try(Connection con = Conexion.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, numeroReservacion);
-            try(java.sql.ResultSet rs = ps.executeQuery()) {
+            try(ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    com.example.proyecto1.modelos.Pago pago = new com.example.proyecto1.modelos.Pago();
+                    Pago pago = new Pago();
                     pago.setIdPago(rs.getInt("id_pago"));
                     pago.setNumeroReservacion(rs.getString("numero_reservacion"));
                     pago.setMonto(rs.getDouble("monto"));
                     pago.setMetodo(rs.getInt("metodo"));
 
-                    java.sql.Date fechaSQL = rs.getDate("fecha");
+                    Date fechaSQL = rs.getDate("fecha");
                     if (fechaSQL != null) {
                         pago.setFecha(fechaSQL.toLocalDate());
                     }

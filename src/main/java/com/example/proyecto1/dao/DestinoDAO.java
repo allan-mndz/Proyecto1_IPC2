@@ -6,7 +6,10 @@ import com.mysql.cj.xdevapi.PreparableStatement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DestinoDAO {
     public boolean insertarDestino(Destino destino){
@@ -30,17 +33,17 @@ public class DestinoDAO {
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.Destino> obtenerTodosLosDestinos() {
-        java.util.List<com.example.proyecto1.modelos.Destino> listaDestinos = new java.util.ArrayList<>();
+    public List<Destino> obtenerTodosLosDestinos() {
+        List<Destino> listaDestinos = new ArrayList<>();
 
         String sql = "SELECT * FROM Destinos";
 
-        try (java.sql.Connection con = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement ps = con.prepareStatement(sql);
-             java.sql.ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                com.example.proyecto1.modelos.Destino d = new com.example.proyecto1.modelos.Destino();
+                Destino d = new Destino();
 
                 // Llenamos el objeto con los datos de la fila actual
                 d.setNombre(rs.getString("nombre"));
@@ -62,8 +65,8 @@ public class DestinoDAO {
     public boolean eliminarDestino(String nombre) {
         String sql = "DELETE FROM Destinos WHERE nombre = ?";
 
-        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nombre);
 
@@ -80,8 +83,8 @@ public class DestinoDAO {
     public boolean actualizarDestino(Destino destino) {
         String sql = "UPDATE Destinos SET pais = ?, descripcion = ?, clima = ?, imagen_url = ? WHERE nombre = ?";
 
-        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, destino.getPais());
             pstmt.setString(2, destino.getDescripcion());

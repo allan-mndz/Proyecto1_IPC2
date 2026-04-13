@@ -3,10 +3,9 @@ package com.example.proyecto1.dao;
 import com.example.proyecto1.config.Conexion;
 import com.example.proyecto1.modelos.Cliente;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClienteDAO {
 
@@ -32,17 +31,17 @@ public class ClienteDAO {
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.Cliente> obtenerTodosLosClientes() {
-        java.util.List<com.example.proyecto1.modelos.Cliente> listaClientes = new java.util.ArrayList<>();
+    public List<Cliente> obtenerTodosLosClientes() {
+        List<Cliente> listaClientes = new ArrayList<>();
 
         String sql = "SELECT * FROM Clientes";
 
-        try (java.sql.Connection con = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement ps = con.prepareStatement(sql);
-             java.sql.ResultSet rs = ps.executeQuery()) {
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                com.example.proyecto1.modelos.Cliente c = new com.example.proyecto1.modelos.Cliente();
+               Cliente c = new Cliente();
 
                 c.setDpi(rs.getString("dpi"));
                 c.setNombre(rs.getString("nombre"));
@@ -66,8 +65,8 @@ public class ClienteDAO {
 
     public Cliente obtenerClientePorDpi(String dpi) {
         String sql = "SELECT * FROM Clientes WHERE dpi = ?";
-        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, dpi);
             try (java.sql.ResultSet rs = ps.executeQuery()) {
@@ -93,8 +92,8 @@ public class ClienteDAO {
 
     public boolean actualizarCliente(Cliente cliente) {
         String sql = "UPDATE Clientes SET nombre=?, fecha_nacimiento=?, telefono=?, email=?, nacionalidad=? WHERE dpi=?";
-        try (java.sql.Connection conn = com.example.proyecto1.config.Conexion.getConnection();
-             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, cliente.getNombre());
             ps.setDate(2, java.sql.Date.valueOf(cliente.getFechaNacimiento()));

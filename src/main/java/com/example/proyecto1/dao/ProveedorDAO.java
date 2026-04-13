@@ -5,7 +5,10 @@ import com.example.proyecto1.modelos.Proveedor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProveedorDAO {
 
@@ -27,14 +30,14 @@ public class ProveedorDAO {
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.Proveedor> obtenerTodosLosProveedores() {
-        java.util.List<Proveedor> listaProveedores = new java.util.ArrayList<>();
+    public List<Proveedor> obtenerTodosLosProveedores() {
+        List<Proveedor> listaProveedores = new ArrayList<>();
 
         String sql = "SELECT * FROM Proveedores";
 
         try (Connection con = Conexion.getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
-             java.sql.ResultSet rs = ps.executeQuery()) {
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Proveedor p = new Proveedor();
@@ -57,7 +60,7 @@ public class ProveedorDAO {
 
     public boolean actualizarProveedor(Proveedor proveedor) {
         String sql = "UPDATE Proveedores SET tipo = ?, pais = ?, contacto = ? WHERE nombre = ?";
-        try (Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+        try (Connection conn = Conexion.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, proveedor.getTipo());
@@ -74,7 +77,7 @@ public class ProveedorDAO {
 
     public boolean eliminarProveedor(String nombre) {
         String sql = "DELETE FROM Proveedores WHERE nombre = ?";
-        try (Connection conn = com.example.proyecto1.config.Conexion.getConnection();
+        try (Connection conn = Conexion.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nombre);

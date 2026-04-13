@@ -1,5 +1,8 @@
 package com.example.proyecto1.controladores;
 
+import com.example.proyecto1.dao.UsuarioDAO;
+import com.example.proyecto1.modelos.Usuario;
+import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +14,8 @@ import java.util.List;
 @WebServlet(name = "UsuarioServlet", urlPatterns = {"/api/usuarios"})
 public class UsuarioServlet extends HttpServlet {
 
-    private com.example.proyecto1.dao.UsuarioDAO usuarioDAO = new com.example.proyecto1.dao.UsuarioDAO();
-    private com.google.gson.Gson gson = new com.google.gson.Gson();
+    private UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -21,7 +24,7 @@ public class UsuarioServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            List<com.example.proyecto1.modelos.Usuario> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
+            List<Usuario> usuarios = usuarioDAO.obtenerTodosLosUsuarios();
             response.setStatus(HttpServletResponse.SC_OK);
             out.print(gson.toJson(usuarios));
         } catch (Exception e) {
@@ -39,7 +42,7 @@ public class UsuarioServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            com.example.proyecto1.modelos.Usuario nuevoUsuario = gson.fromJson(request.getReader(), com.example.proyecto1.modelos.Usuario.class);
+            Usuario nuevoUsuario = gson.fromJson(request.getReader(), Usuario.class);
 
             if (usuarioDAO.insertarUsuario(nuevoUsuario)) {
                 response.setStatus(HttpServletResponse.SC_CREATED);

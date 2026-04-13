@@ -5,9 +5,11 @@ import com.example.proyecto1.modelos.ServicioPaquete;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(name = "ServicioPaqueteServlet", urlPatterns = {"/api/servicio-paquete"})
@@ -16,10 +18,10 @@ public class ServicioPaqueteServlet extends HttpServlet {
     private Gson gson = new Gson();
 
     @Override
-    protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        java.io.PrintWriter out = response.getWriter();
+        PrintWriter out = response.getWriter();
 
         try {
             String nombrePaquete = request.getParameter("paquete");

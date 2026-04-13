@@ -6,6 +6,8 @@ import com.example.proyecto1.modelos.ServicioPaquete;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServicioPaqueteDAO {
     public boolean insertarServicioPaquete(ServicioPaquete servicioPaquete){
@@ -26,8 +28,8 @@ public class ServicioPaqueteDAO {
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.ServicioPaquete> obtenerServiciosPorPaquete(String nombreDelPaquete) {
-        java.util.List<com.example.proyecto1.modelos.ServicioPaquete> listaServicios = new java.util.ArrayList<>();
+    public List<ServicioPaquete> obtenerServiciosPorPaquete(String nombreDelPaquete) {
+        List<ServicioPaquete> listaServicios = new ArrayList<>();
 
         String sql = "SELECT * FROM Servicio_Paquete WHERE paquete_nombre = ?";
 

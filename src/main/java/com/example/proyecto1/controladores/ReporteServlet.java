@@ -1,5 +1,7 @@
 package com.example.proyecto1.controladores;
 
+import com.example.proyecto1.dao.ReporteDAO;
+import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +14,8 @@ import java.util.Map;
 @WebServlet(name = "ReporteServlet", urlPatterns = {"/api/reportes"})
 public class ReporteServlet extends HttpServlet {
 
-    private com.example.proyecto1.dao.ReporteDAO reporteDAO = new com.example.proyecto1.dao.ReporteDAO();
-    private com.google.gson.Gson gson = new com.google.gson.Gson();
+    private ReporteDAO reporteDAO = new ReporteDAO();
+    private Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

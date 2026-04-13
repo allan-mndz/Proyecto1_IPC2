@@ -109,16 +109,36 @@ public class ReporteDAO {
     }
 
     private List<Map<String, Object>> ejecutarConsulta(String sql, String inicio, String fin) {
-        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, inicio); ps.setString(2, fin);
-            try (ResultSet rs = ps.executeQuery()) { return convertirAMapa(rs); }
-        } catch (Exception e) { System.out.println("Error Reporte: " + e.getMessage()); return new ArrayList<>(); }
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, inicio);
+            ps.setString(2, fin);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return convertirAMapa(rs);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error Reporte: " + e.getMessage()); return new ArrayList<>();
+        }
     }
 
     private List<Map<String, Object>> ejecutarConsultaDoble(String sql, String inicio, String fin) {
-        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, inicio); ps.setString(2, fin); ps.setString(3, inicio); ps.setString(4, fin);
-            try (ResultSet rs = ps.executeQuery()) { return convertirAMapa(rs); }
-        } catch (Exception e) { System.out.println("Error Reporte: " + e.getMessage()); return new ArrayList<>(); }
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, inicio);
+            ps.setString(2, fin);
+            ps.setString(3, inicio);
+            ps.setString(4, fin);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return convertirAMapa(rs);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error Reporte: " + e.getMessage()); return new ArrayList<>();
+        }
     }
 }

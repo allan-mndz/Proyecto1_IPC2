@@ -4,6 +4,9 @@ import com.example.proyecto1.dao.ClienteDAO;
 import com.example.proyecto1.modelos.Cliente;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,21 +15,22 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "ClienteServlet", urlPatterns = {"/api/clientes"})
 public class ClienteServlet extends HttpServlet {
 
     private ClienteDAO clienteDAO = new ClienteDAO();
-    private Gson gson = new GsonBuilder().registerTypeAdapter(java.time.LocalDate.class, new com.google.gson.TypeAdapter<java.time.LocalDate>() {
+    private Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new TypeAdapter<LocalDate>() {
 
         @Override
-        public void write(com.google.gson.stream.JsonWriter out, java.time.LocalDate value) throws IOException {
+        public void write(JsonWriter out, LocalDate value) throws IOException {
             out.value(value != null ? value.toString() : null);
         }
         @Override
-        public java.time.LocalDate read(com.google.gson.stream.JsonReader in) throws IOException {
-            return java.time.LocalDate.parse(in.nextString());
+        public LocalDate read(JsonReader in) throws IOException {
+            return LocalDate.parse(in.nextString());
         }
     }).create();
 

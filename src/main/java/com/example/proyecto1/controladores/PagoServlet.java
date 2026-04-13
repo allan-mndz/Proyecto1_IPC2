@@ -1,33 +1,43 @@
 package com.example.proyecto1.controladores;
 
+import com.example.proyecto1.dao.PagoDAO;
+import com.example.proyecto1.modelos.Pago;
+import com.google.gson.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.List;
 
 @WebServlet(name = "PagoServlet", urlPatterns = {"/api/pagos"})
 public class PagoServlet extends HttpServlet {
 
-    private com.example.proyecto1.dao.PagoDAO pagoDAO = new com.example.proyecto1.dao.PagoDAO();
+    private PagoDAO pagoDAO = new PagoDAO();
 
-    private com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
-            .registerTypeAdapter(java.time.LocalDate.class, new com.google.gson.JsonSerializer<java.time.LocalDate>() {
-                @Override
-                public com.google.gson.JsonElement serialize(java.time.LocalDate src, java.lang.reflect.Type typeOfSrc, com.google.gson.JsonSerializationContext context) {
-                    return new com.google.gson.JsonPrimitive(src.toString()); // Enseña a enviar fechas a Angular
-                }
-            })
-            .registerTypeAdapter(java.time.LocalDate.class, new com.google.gson.JsonDeserializer<java.time.LocalDate>() {
-                @Override
-                public java.time.LocalDate deserialize(com.google.gson.JsonElement json, java.lang.reflect.Type typeOfT, com.google.gson.JsonDeserializationContext context) {
-                    String date = json.getAsString();
-                    if (date == null || date.trim().isEmpty()) return null;
-                    try { return java.time.LocalDate.parse(date); } catch (Exception e) { return null; } // Enseña a recibir fechas de Angular
-                }
-            }).create();
+    private Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+
+        @Override
+        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString()); // Enseña a enviar fechas a Angular
+        }
+    }).registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+            String date = json.getAsString();
+            if (date == null || date.trim().isEmpty()) {
+                return null;
+            }
+            try {
+                return LocalDate.parse(date);
+            } catch (Exception e) {
+                return null;
+            } // Enseña a recibir fechas de Angular
+        }
+    }).create();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,7 +53,7 @@ public class PagoServlet extends HttpServlet {
                 return;
             }
 
-            List<com.example.proyecto1.modelos.Pago> pagos = pagoDAO.obtenerPagosPorReservacion(numRes);
+            List<Pago> pagos = pagoDAO.obtenerPagosPorReservacion(numRes);
             response.setStatus(HttpServletResponse.SC_OK);
             out.print(gson.toJson(pagos));
         } catch (Exception e) {
@@ -61,7 +71,7 @@ public class PagoServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            com.example.proyecto1.modelos.Pago nuevoPago = gson.fromJson(request.getReader(), com.example.proyecto1.modelos.Pago.class);
+            Pago nuevoPago = gson.fromJson(request.getReader(), Pago.class);
 
             int resultado = pagoDAO.procesarPago(nuevoPago);
 

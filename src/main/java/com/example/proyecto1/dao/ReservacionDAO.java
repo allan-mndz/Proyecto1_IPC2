@@ -6,6 +6,8 @@ import com.example.proyecto1.modelos.Reservacion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReservacionDAO {
     public boolean insertarReservacion(Reservacion reservacion){
@@ -31,7 +33,7 @@ public class ReservacionDAO {
                 psRes.executeUpdate();
             }
 
-            java.util.List<String> dpis = reservacion.getDpisPasajeros();
+            List<String> dpis = reservacion.getDpisPasajeros();
 
             if (dpis != null && !dpis.isEmpty()) {
                 try(PreparedStatement psPas = con.prepareStatement(sqlPasajero)){
@@ -69,8 +71,8 @@ public class ReservacionDAO {
         }
     }
 
-    public java.util.List<com.example.proyecto1.modelos.Reservacion> obtenerReservaciones(String numeroReservacion){
-        java.util.List<Reservacion> listaReservaciones = new java.util.ArrayList<>();
+    public List<Reservacion> obtenerReservaciones(String numeroReservacion){
+        List<Reservacion> listaReservaciones = new ArrayList<>();
 
         String sql = "SELECT * FROM Reservaciones WHERE numero_reservacion = ?";
 
